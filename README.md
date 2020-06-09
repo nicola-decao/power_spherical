@@ -1,7 +1,7 @@
 # The Power Spherical distribution
 
 ## Overview
-This library contains a Pytorch implementation of the Power Spherical distribution, as presented in [[1]](#citation)(http://arxiv.org/abs/2006.TBA).
+This library contains a Pytorch implementation of the Power Spherical distribution, as presented in [[1]](#citation)(https://arxiv.org/abs/2006.04437).
 
 ## Dependencies
 
@@ -68,7 +68,7 @@ MIT
 ```
 [1] De Cao, N., Aziz, W. (2020). 
 The Power Spherical distrbution.
-arXiv preprint arXiv:2006.TBA.
+arXiv preprint arXiv:2006.04437.
 ```
 
 BibTeX format:
@@ -78,7 +78,7 @@ BibTeX format:
   author={
     De Cao, Nicola and
     Aziz, Wilker},
-  journal={arXiv preprint arXiv:2006.TBA},
+  journal={arXiv preprint arXiv:2006.04437},
   year={2020}
 }
 ```
