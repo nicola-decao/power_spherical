@@ -68,7 +68,8 @@ MIT
 ```
 [1] De Cao, N., Aziz, W. (2020). 
 The Power Spherical distrbution.
-arXiv preprint arXiv:2006.04437.
+In Proceedings of the 37th International 
+Conference on Machine Learning, INNF+.
 ```
 
 BibTeX format:
@@ -78,7 +79,7 @@ BibTeX format:
   author={
     De Cao, Nicola and
     Aziz, Wilker},
-  journal={arXiv preprint arXiv:2006.04437},
+  journal={Proceedings of the 37th International Conference on Machine Learning, INNF+},
   year={2020}
 }
 ```
