@@ -7,6 +7,10 @@ _EPS = 1e-7
 
 
 class _TTransform(torch.distributions.Transform):
+    
+    domain = torch.distributions.constraints.real
+    codomain = torch.distributions.constraints.real
+    
     def _call(self, x):
         t = x[..., 0].unsqueeze(-1)
         v = x[..., 1:]
@@ -23,6 +27,10 @@ class _TTransform(torch.distributions.Transform):
 
 
 class _HouseholderRotationTransform(torch.distributions.Transform):
+    
+    domain = torch.distributions.constraints.real
+    codomain = torch.distributions.constraints.real
+    
     def __init__(self, loc):
         super().__init__()
         self.loc = loc
@@ -50,8 +58,9 @@ class HypersphericalUniform(torch.distributions.Distribution):
     }
 
     def __init__(self, dim, device="cpu", dtype=torch.float32, validate_args=None):
+        self.dim = dim if isinstance(dim, torch.Tensor) else torch.tensor(dim, device=device)
         super().__init__(validate_args=validate_args)
-        self.dim, self.device, self.dtype = dim, device, dtype
+        self.device, self.dtype = device, dtype
 
     def rsample(self, sample_shape=()):
         v = torch.empty(
@@ -87,13 +96,15 @@ class MarginalTDistribution(torch.distributions.TransformedDistribution):
     has_rsample = True
 
     def __init__(self, dim, scale, validate_args=None):
+        self.dim = dim if isinstance(dim, torch.Tensor) else torch.tensor(dim, device=scale.device)
+        self.scale = scale
         super().__init__(
             torch.distributions.Beta(
                 (dim - 1) / 2 + scale, (dim - 1) / 2, validate_args=validate_args
             ),
             transforms=torch.distributions.AffineTransform(loc=-1, scale=2),
         )
-        self.dim, self.scale = dim, scale
+        
 
     def entropy(self):
         return self.base_dist.entropy() + math.log(2)
@@ -113,7 +124,7 @@ class MarginalTDistribution(torch.distributions.TransformedDistribution):
 
 class _JointTSDistribution(torch.distributions.Distribution):
     def __init__(self, marginal_t, marginal_s):
-        super().__init__()
+        super().__init__(validate_args=False)
         self.marginal_t, self.marginal_s = marginal_t, marginal_s
 
     def rsample(self, sample_shape=()):
@@ -145,11 +156,7 @@ class PowerSpherical(torch.distributions.TransformedDistribution):
 
     def __init__(self, loc, scale, validate_args=None):
 
-        if isinstance(scale, torch.Tensor) and len(scale.shape) > 1:
-            assert (
-                scale.shape[-1] != 1
-            ), "`scale' cannot have 1 as last dimention when `isinstance(scale, torch.Tensor)' and `len(scale.shape) > 1'."
-
+        self.loc, self.scale, = loc, scale
         super().__init__(
             _JointTSDistribution(
                 MarginalTDistribution(
@@ -164,7 +171,7 @@ class PowerSpherical(torch.distributions.TransformedDistribution):
             ),
             [_TTransform(), _HouseholderRotationTransform(loc),],
         )
-        self.loc, self.scale, = loc, scale
+        
 
     def log_prob(self, value):
         return self.log_normalizer() + self.scale * torch.log1p(
