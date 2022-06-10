@@ -32,23 +32,30 @@ Please have a look into the [examples](https://github.com/nicola-decao/power_sph
 
 Here a minimal example that demonstrate differentiable sampling:
 ```python
->>> from power_spherical import PowerSpherical
->>> p = PowerSpherical(
+from power_spherical import PowerSpherical
+p = PowerSpherical(
       loc=torch.tensor([0., 1.], requires_grad=True),
       scale=torch.tensor(4., requires_grad=True),
     )
->>> p.rsample()
-
-tensor([-0.1786,  0.9839], grad_fn=<SubBackward0>)
+p.rsample()
 ```
+
+
+
+
+    tensor([-0.3820,  0.9242], grad_fn=<SubBackward0>)
+    
 and computing KL divergence with the uniform distribution:
 ```python
->>> from power_spherical import HypersphericalUniform
->>> q = HypersphericalUniform(dim=2)
->>> torch.distributions.kl_divergence(p, q)
-
-tensor(1.2486, grad_fn=<AddBackward0>)
+from power_spherical import HypersphericalUniform
+q = HypersphericalUniform(dim=2)
+torch.distributions.kl_divergence(p, q)
 ```
+
+
+
+
+    tensor(1.2486, grad_fn=<AddBackward0>)
 
 Examples of 2D and 3D plots are show in [examples](https://github.com/nicola-decao/power_spherical/blob/master/example.ipynb) and will generate something similar to these figures below.
 <p align="center">
