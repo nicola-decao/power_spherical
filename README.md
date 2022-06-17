@@ -20,7 +20,7 @@ Optional dependency for [examples](https://github.com/nicola-decao/power_spheric
 To install, run
 
 ```bash
-$ python setup.py install
+python setup.py install
 ```
 
 ## Structure
